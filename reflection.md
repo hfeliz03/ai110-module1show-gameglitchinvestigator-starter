@@ -47,5 +47,7 @@ I tried it on the browser and then performed unittesting
 
 - What is one habit or strategy from this project that you want to reuse in future labs or projects?
   - This could be a testing habit, a prompting strategy, or a way you used Git.
-- What is one thing you would do differently next time you work with AI on a coding task?
+  Writing #FIXME on the line or selecting #file #codebase to be more specific with what you intend to work on.
 - In one or two sentences, describe how this project changed the way you think about AI generated code.
+  It was interested to see how it works with/against testing, I had never done that in the past.
+  This project emphasized the importance of combining AI assistance with critical thinking and thorough testing to ensure reliable and accurate results.
