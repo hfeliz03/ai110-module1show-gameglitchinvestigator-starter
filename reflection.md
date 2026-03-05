@@ -16,10 +16,14 @@ It looks fine now. This screen is just GameGlitch Investigator. Developer, debug
 ## 2. How did you use AI as a teammate?
 
 - Which AI tools did you use on this project (for example: ChatGPT, Gemini, Copilot)?
+
 Copilot
 - Give one example of an AI suggestion that was correct (including what the AI suggested and how you verified the result).
+
 It showed me that the hard mode was not utilizing its intended range, but the normal mode's range
+
 - Give one example of an AI suggestion that was incorrect or misleading (including what the AI suggested and how you verified the result).
+
 NA
 ---
 
@@ -28,18 +32,25 @@ NA
 - How did you decide whether a bug was really fixed?
 I tried it on the browser and then performed unittesting
 - Describe at least one test you ran (manual or using pytest) and what it showed you about your code.  
+
   I ran a manual test where I intentionally guessed numbers higher and lower than the secret number to verify if the hints were accurate. This test showed that the hint logic was flawed, especially in hard mode, where the hints were reversed.
 
 - Did AI help you design or understand any tests? How?  
+
   Yes, AI suggested creating a test to verify the range logic for hard mode. It helped me understand that the issue was due to the hard mode using the normal mode's range, which I confirmed by running the test.
 
 ---
 
 ## 4. What did you learn about Streamlit and state?
 
-- In your own words, explain why the secret number kept changing in the original app.
-- How would you explain Streamlit "reruns" and session state to a friend who has never used Streamlit?
-- What change did you make that finally gave the game a stable secret number?
+- In your own words, explain why the secret number kept changing in the original app.  
+  The secret number kept changing because the app was generating a new random number every time the Streamlit app reran. This happened because the secret number was not being stored in the session state, which persists data across reruns.
+
+  Streamlit reruns the entire script from top to bottom whenever the user interacts with the app, such as clicking a button. Session state is like a temporary storage that allows you to save variables or data so they persist across these reruns, ensuring that certain values remain stable.
+
+- What change did you make that finally gave the game a stable secret number?  
+  I modified the code to store the secret number in Streamlit's session state. By checking if the secret number already existed in the session state before generating a new one, I ensured that the number remained consistent across reruns.
+- How would you explain Streamlit "reruns" and session state to a friend who has never used Streamlit?  
 
 ---
 
@@ -47,7 +58,9 @@ I tried it on the browser and then performed unittesting
 
 - What is one habit or strategy from this project that you want to reuse in future labs or projects?
   - This could be a testing habit, a prompting strategy, or a way you used Git.
+
   Writing #FIXME on the line or selecting #file #codebase to be more specific with what you intend to work on.
 - In one or two sentences, describe how this project changed the way you think about AI generated code.
-  It was interested to see how it works with/against testing, I had never done that in the past.
+
+  It was interesting to see how it works with/against testing, I had never done that in the past.
   This project emphasized the importance of combining AI assistance with critical thinking and thorough testing to ensure reliable and accurate results.
