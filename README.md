@@ -1,48 +1,35 @@
-# 🎮 Game Glitch Investigator: The Impossible Guesser
+# Game Glitch Investigator
 
-## 🚨 The Situation
+## Overview
 
-You asked an AI to build a simple "Number Guessing Game" using Streamlit.
-It wrote the code, ran away, and now the game is unplayable. 
+This project is a Streamlit number guessing game that was originally generated with AI and then debugged and cleaned up. The player chooses a difficulty, guesses a hidden number, and uses the game feedback to narrow down the answer before running out of attempts.
 
-- You can't win.
-- The hints lie to you.
-- The secret number seems to have commitment issues.
+## Setup
 
-## 🛠️ Setup
+1. Install dependencies with `pip install -r requirements.txt`
+2. Start the app with `python -m streamlit run app.py`
+3. Run tests with `pytest`
 
-1. Install dependencies: `pip install -r requirements.txt`
-2. Run the broken app: `python -m streamlit run app.py`
+## TF Task Summary
 
-## 🕵️‍♂️ Your Mission
+### Game Purpose
 
-1. **Play the game.** Open the "Developer Debug Info" tab in the app to see the secret number. Try to win.
-2. **Find the State Bug.** Why does the secret number change every time you click "Submit"? Ask ChatGPT: *"How do I keep a variable from resetting in Streamlit when I click a button?"*
-3. **Fix the Logic.** The hints ("Higher/Lower") are wrong. Fix them.
-4. **Refactor & Test.** - Move the logic into `logic_utils.py`.
-   - Run `pytest` in your terminal.
-   - Keep fixing until all tests pass!
+The app is meant to be a simple guessing game: the program selects a secret number, the player submits guesses, and the app responds with whether the guess was too high, too low, or correct.
 
-## 📝 Document Your Experience
+### Bugs Identified
 
-- [ ] **Describe the game's purpose.**  
-The purpose of the game is to guess a secret number chosen by the program. The game provides hints ("Higher" or "Lower") to guide the player toward the correct number.
+1. The secret number could reset across interactions, which broke the game flow and made winning unreliable.
+2. Guess feedback needed to be verified so the higher/lower hints matched the actual comparison.
+3. Core game behavior was mixed directly into the Streamlit file, which made the logic harder to test.
 
-- [ ] **Detail which bugs you found.**  
-1. The secret number changes every time the "Submit" button is clicked, making it impossible to win.  
-2. The hints provided ("Higher" or "Lower") are incorrect and misleading.  
+### Fixes Applied
 
-- [ ] **Explain what fixes you applied.**  
-1. To fix the secret number resetting issue, I used Streamlit's `st.session_state` to persist the secret number across button clicks.  
-2. I corrected the logic for the hints by comparing the player's guess with the secret number and ensuring the output accurately reflects whether the guess is too high or too low.  
-3. I refactored the game logic into a separate `logic_utils.py` file for better modularity and maintainability.  
-4. I wrote and ran tests using `pytest` to verify the correctness of the fixes.
+1. Persisted the active game state with `st.session_state` so the secret number, attempts, score, and history survive reruns.
+2. Moved reusable game logic into `logic_utils.py` to keep the Streamlit UI thinner and easier to maintain.
+3. Kept guess parsing and comparison logic centralized so feedback stays consistent.
+4. Expanded the test coverage with `pytest` to validate win/lose comparisons, input parsing, difficulty ranges, and score behavior.
 
-## 📸 Demo
+## Notes
 
-![Winning Game Screenshot](Screenshot%202026-03-04%20at%2010.49.59%20p.m..png)
-
-
-## 🚀 Stretch Features
-
-- [ ] [If you choose to complete Challenge 4, insert a screenshot of your Enhanced Game UI here]
+- The Developer Debug Info panel is still available in the app for inspecting state while testing.
+- Difficulty settings change both the valid number range and the attempt limit.

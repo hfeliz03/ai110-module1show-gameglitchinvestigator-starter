@@ -8,6 +8,14 @@ from logic_utils import (
     update_score,
 )
 
+
+def reset_game(low: int, high: int) -> None:
+    st.session_state.secret = random.randint(low, high)
+    st.session_state.attempts = 0
+    st.session_state.score = 0
+    st.session_state.status = "playing"
+    st.session_state.history = []
+
 st.set_page_config(page_title="Glitchy Guesser", page_icon="🎮")
 
 st.title("🎮 Game Glitch Investigator")
@@ -28,20 +36,14 @@ attempt_limit_map = {
 }
 attempt_limit = attempt_limit_map[difficulty]
 
-# Use centralized ranges from logic_utils
 low, high = get_range_for_difficulty(difficulty)
 
 st.sidebar.caption(f"Range: {low} to {high}")
 st.sidebar.caption(f"Attempts allowed: {attempt_limit}")
 
-# Initialize or reset session state when difficulty changes
 if "difficulty" not in st.session_state or st.session_state.get("difficulty") != difficulty:
     st.session_state.difficulty = difficulty
-    st.session_state.secret = random.randint(low, high)
-    st.session_state.attempts = 0
-    st.session_state.score = 0
-    st.session_state.status = "playing"
-    st.session_state.history = []
+    reset_game(low, high)
 
 if "secret" not in st.session_state:
     st.session_state.secret = random.randint(low, high)
@@ -60,7 +62,6 @@ if "history" not in st.session_state:
 
 st.subheader("Make a guess")
 
-# Dynamic info text using the current range and attempt count
 st.info(
     f"Guess a number between {low} and {high}. "
     f"Attempts left: {attempt_limit - st.session_state.attempts}"
@@ -87,18 +88,12 @@ with col3:
     show_hint = st.checkbox("Show hint", value=True)
 
 if new_game:
-    st.session_state.attempts = 0
-    st.session_state.secret = random.randint(low, high)
-    st.session_state.score = 0
-    st.session_state.status = "playing"
-    st.session_state.history = []
+    reset_game(low, high)
     st.success("New game started.")
-    # Use experimental_rerun if available; in newer Streamlit versions this attribute may not exist.
     rerun = getattr(st, "experimental_rerun", None)
     if callable(rerun):
         rerun()
     else:
-        # Stop execution so Streamlit will perform a rerun on the next interaction.
         st.stop()
 
 if st.session_state.status != "playing":
@@ -112,7 +107,6 @@ if submit:
     ok, guess_int, err = parse_guess(raw_guess)
 
     if not ok:
-        # Normalize history entries for invalid input
         st.session_state.history.append({
             "valid": False,
             "raw": raw_guess,
@@ -127,7 +121,6 @@ if submit:
             "guess": guess_int,
         })
 
-        # Always keep secret as int
         outcome = check_guess(guess_int, st.session_state.secret)
         message = hint_for_outcome(outcome)
 
